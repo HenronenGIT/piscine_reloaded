@@ -3,52 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_sort_params.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmaronen <hmaronen@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: hmaronen <hmaronen@student.Hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/30 12:37:39 by hmaronen          #+#    #+#             */
-/*   Updated: 2021/11/03 17:50:29 by hmaronen         ###   ########.fr       */
+/*   Created: 2021/12/11 11:30:40 by hmaronen          #+#    #+#             */
+/*   Updated: 2021/12/11 11:30:43 by hmaronen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 
 void	ft_putchar(char c);
-int		ft_strcmp(char *s1, char *s2);
-void	ft_putstr(char *str);
 
-int	main(int argc, char **argv)
-{
-	int		i;
-	int		j;
-	char	*tmp;
-
-	i = 0;
-	while (++i < argc)
-	{
-		j = i;
-		while (++j < argc)
-		{
-			if (ft_strcmp(argv[i], argv[j]) > 0)
-			{
-				tmp = argv[i];
-				argv[i] = argv[j];
-				argv[j] = tmp;
-			}
-		}
-	}
-	i = 0;
-	while (++i < argc)
-	{
-		ft_putstr(argv[i]);
-		ft_putchar('\n');
-	}
-	return (0);
-}
-
-void	ft_putstr(char *str)
+void	ft_putstr(char const *str)
 {
 	int	i;
 
+	if (!str)
+		return ;
 	i = 0;
 	while (str[i] != '\0')
 	{
@@ -57,12 +28,62 @@ void	ft_putstr(char *str)
 	}
 }
 
-int	ft_strcmp(char *s1, char *s2)
+int	ft_strcmp(const char *s1, const char *s2)
 {
 	int	i;
 
 	i = 0;
-	while ((s1[i] == s2[i]) && (s1[i] != '\0' && s2[i] != '\0'))
+	while (s1[i] == s2[i] && s2 [i] != '\0' && s1[i] != '\0')
 		i++;
-	return (s1[i] - s2[i]);
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}
+
+void	ft_print_array(char **arr)
+{
+	size_t	i;
+
+	i = 0;
+	while (arr[i] != NULL)
+	{
+		ft_putstr(arr[i]);
+		ft_putchar('\n');
+		i++;
+	}
+}
+
+void	ft_swap_array(char **argv1, char **argv2)
+{
+	char	*temp;
+
+	temp = *argv1;
+	*argv1 = *argv2;
+	*argv2 = temp;
+}
+
+void	ft_sort_params(int argc, char **argv)
+{
+	size_t	i;
+
+	argc = 0;
+	i = 0;
+	while (argv[i] != NULL)
+	{
+		if (argv[i + 1] == NULL)
+			break ;
+		if ((ft_strcmp(argv[i], argv[i + 1])) > 0)
+		{
+			ft_swap_array(&argv[i], &argv[i + 1]);
+			i = 0;
+		}
+		else
+			i++;
+	}
+	ft_print_array(argv);
+}
+
+int	main(int argc, char **argv)
+{
+	argc = 0;
+	ft_sort_params(argc, &argv[1]);
+	return (0);
 }
